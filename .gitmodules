@@ -1,6 +1,6 @@
 [submodule "ArduinoCore-avr"]
-	path = ArduinoCore-avr
+	path = Arduino/ArduinoCore-avr
 	url = https://github.com/arduino/ArduinoCore-avr.git
-[submodule "ArduinoSTL"]
-	path = ArduinoSTL
-	url = https://github.com/mike-matera/ArduinoSTL.git
+[submodule "Arduino/ArduinoSTL"]
+	path = Arduino/ArduinoSTL
+	url = https://github.com/jamieb133/ArduinoSTL.git
