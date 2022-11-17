@@ -1,0 +1,95 @@
+#pragma once
+
+#include <stdio.h>
+#include <string.h>
+
+namespace std {
+
+    template <typename T>
+    class function;
+
+    template <typename RetType, typename ...Args>
+    class function<RetType(Args...)> {
+    private:
+        using InvokePtr =  RetType(*)(void*, Args&...);
+        using CreatePtr =  void(*)(void*, void*);
+        using DestroyPtr = void(*)(void*);
+        
+        InvokePtr invokePtr;
+        CreatePtr createPtr;
+        DestroyPtr destroyPtr;
+
+        template <typename Functor>
+        //static RetType invoke(Functor* func, Args&&... args) {
+        static RetType invoke(Functor* func, Args... args) {
+            return (*func)(args...);
+        }
+
+        template <typename Functor>
+        static void create(Functor* dest, Functor* src) {
+            //new (dest) Functor (*src);
+            memcpy(dest, src, sizeof(Functor));
+        }
+
+        template <typename Functor>
+        static void destroy(Functor* func) {
+            func->~Functor();
+        }
+
+        // We need storage to hold the function.
+        size_t storageSize;
+        char* data;
+
+    public:
+        template<typename Functor>
+        function(Functor functor) : 
+            invokePtr(reinterpret_cast<InvokePtr>(invoke<Functor>)),
+            createPtr(reinterpret_cast<CreatePtr>(create<Functor>)),
+            destroyPtr(reinterpret_cast<DestroyPtr>(destroy<Functor>)),
+            storageSize(sizeof(Functor)),
+            data(new char[sizeof(Functor)])
+        {
+            //createPtr(data, std::addressof(functor));
+            createPtr(data, &functor);
+        }
+
+        function(const function& other) :
+            invokePtr(other.invokePtr),
+            createPtr(other.createPtr),
+            destroyPtr(other.destroyPtr),
+            storageSize(other.storageSize)
+        {
+            if (data != nullptr)
+                delete data;
+            data = new char[storageSize];
+            createPtr(data, other.data);
+        }
+
+        function& operator= (const function& other) {
+            // Delete old func.
+            if (data != nullptr)
+                delete data;
+            
+            // Copy attributes.
+            invokePtr = other.invokePtr;
+            createPtr = other.createPtr;
+            destroyPtr = other.destroyPtr;
+            storageSize = other.storageSize;
+
+            // Create new memory space for func.
+            data = new char[storageSize];
+            createPtr(data, other.data);
+        }
+
+        virtual ~function() {
+            destroyPtr(data);
+        }
+
+        //RetType operator() (Args&&... args) const {
+        RetType operator() (Args... args) const {
+            // Static cast prevents compiler error if void.
+            //return invokePtr(data, std::forward<Args>(args)...);
+            return invokePtr(data, args...);
+        }
+    };
+}

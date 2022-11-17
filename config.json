@@ -1,0 +1,80 @@
+{
+    "configs" : [
+        {
+            "name" : "clang",
+            "parameters": [
+                {
+                    "name" : "TARGET_NAME",
+                    "type" : "STRING",
+                    "value" : "testapp"
+                }
+            ]
+        },
+        {
+            "name" : "arduino",
+            "upload_enabled": "",
+            "parameters": [
+                {
+                    "name": "ARDUINO_BUILD",
+                    "type": "BOOL",
+                    "value": "on"
+                },
+                {
+                    "name": "TARGET_CMAKE_FILES",
+                    "type": "STRING",
+                    "value": "cmake/avr-cmake/avrcore_build.cmake;cmake/avr-cmake/avrstl_build.cmake;cmake/avr-cmake/avrdude_flash.cmake;cmake/avr-cmake/check_for_lto.cmake;cmake/avr-cmake/build_functions.cmake"
+                },
+                {
+                    "name" : "CMAKE_TOOLCHAIN_FILE",
+                    "type" : "STRING",
+                    "value" : "cmake/avr-cmake/toolchain/toolchain_avr.cmake"
+                },
+                {
+                    "name" : "AVRCORE_DIR",
+                    "type" : "STRING",
+                    "value" : "./Arduino/ArduinoCore-avr"
+                },
+                {
+                    "name" : "AVRSTL_DIR",
+                    "type" : "STRING",
+                    "value" : "./Arduino/ArduinoSTL"
+                },
+                {
+                    "name" : "TARGET_DEVICE",
+                    "type" : "STRING",
+                    "value" : "/dev/cu.usbmodem142101"
+                },
+                {
+                    "name" : "TARGET_BAUDRATE",
+                    "type" : "STRING",
+                    "value" : "115200"
+                },
+                {
+                    "name" : "TARGET_NAME",
+                    "type" : "STRING",
+                    "value" : "testapp"
+                },
+                {
+                    "name" : "AVR_ROOT",
+                    "type" : "STRING",
+                    "value" : "/Users/jamiebrown/Library/Arduino15/packages/arduino/tools/"
+                },
+                {
+                    "name" : "AVRDUDE",
+                    "type" : "STRING",
+                    "value" : "avrdude/6.3.0-arduino17/bin/avrdude"
+                },
+                {
+                    "name" : "AVRDUDE_CONF",
+                    "type" : "STRING",
+                    "value" : "avrdude/6.3.0-arduino17/etc/avrdude.conf"
+                },
+                {
+                    "name" : "TOOLCHAIN_ROOT",
+                    "type" : "STRING",
+                    "value" : "avr-gcc/7.3.0-atmel3.6.1-arduino7"
+                }
+            ]
+        }
+    ]
+}

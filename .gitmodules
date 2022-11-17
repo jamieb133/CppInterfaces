@@ -4,3 +4,6 @@
 [submodule "Arduino/ArduinoSTL"]
 	path = Arduino/ArduinoSTL
 	url = https://github.com/jamieb133/ArduinoSTL.git
+[submodule "cmake/avr-cmake"]
+	path = cmake/avr-cmake
+	url = https://github.com/jamieb133/avr-cmake.git
