@@ -1,9 +1,9 @@
 [submodule "ArduinoCore-avr"]
 	path = Arduino/ArduinoCore-avr
 	url = https://github.com/arduino/ArduinoCore-avr.git
-[submodule "Arduino/ArduinoSTL"]
+[submodule "ArduinoSTL"]
 	path = Arduino/ArduinoSTL
 	url = https://github.com/jamieb133/ArduinoSTL.git
-[submodule "cmake/avr-cmake"]
+[submodule "avr-cmake"]
 	path = cmake/avr-cmake
 	url = https://github.com/jamieb133/avr-cmake.git
