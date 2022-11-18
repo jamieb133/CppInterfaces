@@ -14,39 +14,39 @@ void initVariant() { }
 void setupUSB() __attribute__((weak));
 void setupUSB() { }
 
-std::shared_ptr<ArduinoPlatform> ArduinoPlatform::_instance = nullptr;
-bool ArduinoPlatform::_created = false;
+static std::shared_ptr<ArduinoPlatform> _instance = nullptr;
+static bool _created = false;
+
+extern void debugLoop();
 
 std::shared_ptr<ArduinoPlatform> ArduinoPlatform::getInstance() {
-    // Empty setup function if user forgets to create the instance.
-    if (_instance == nullptr)
-        createInstance([](){});
-    
+    assert(_created);    
     return _instance;
 }
 
 void ArduinoPlatform::createInstance(std::function<void()>& user_setup) {
     // Prepare to die if already created...
-    assert(!_created);
-    _instance = std::shared_ptr<ArduinoPlatform>(new ArduinoPlatform(user_setup));
+    if (!_created);
+        _instance = std::shared_ptr<ArduinoPlatform>(new ArduinoPlatform(user_setup));
     _created = true;
 }
 
 void ArduinoPlatform::createInstance(std::function<void()> user_setup) {
-    // Prepare to die if already created...
-    assert(!_created);
-    _instance = std::shared_ptr<ArduinoPlatform>(new ArduinoPlatform(user_setup));
+    if (!_created);
+        _instance = std::shared_ptr<ArduinoPlatform>(new ArduinoPlatform(user_setup));
     _created = true;
 }
 
 void ArduinoPlatform::createInstance() {
     // Prepare to die if already created...
-    assert(!_created);
-    _instance = std::shared_ptr<ArduinoPlatform>(new ArduinoPlatform());
+    if (!_created);
+        _instance = std::shared_ptr<ArduinoPlatform>(new ArduinoPlatform());
     _created = true;
 }
 
-ArduinoPlatform::ArduinoPlatform(std::function<void()>& user_setup) {
+ArduinoPlatform::ArduinoPlatform(std::function<void()>& user_setup) :
+    m_running(false)
+{
     init();
     initVariant();
 #if defined(USBCON)
@@ -56,7 +56,9 @@ ArduinoPlatform::ArduinoPlatform(std::function<void()>& user_setup) {
     user_setup();
 }
 
-ArduinoPlatform::ArduinoPlatform() {
+ArduinoPlatform::ArduinoPlatform() :
+    m_running(false)
+{
     init();
     initVariant();
 #if defined(USBCON)
@@ -66,24 +68,38 @@ ArduinoPlatform::ArduinoPlatform() {
 }
 
 void ArduinoPlatform::run(std::function<void()>& user_main_routine) {
-    while(true) {
+    m_running = true;
+
+    while(m_running) {
         user_main_routine();
+
+        if (m_deferredQueue.size() > 0) {
+            auto cb = m_deferredQueue.front();
+            cb();
+            m_deferredQueue.pop();
+        }
+
         if (serialEventRun) 
             serialEventRun();
     }
+
+    std::cout << "Arduino platform finished\n";
 }
 
 void ArduinoPlatform::run(std::function<void()>&& user_main_routine) {
-    while(true) {
-        user_main_routine();
-        if (serialEventRun) 
-            serialEventRun();
-    }
+    run(user_main_routine);    
 }
 
 void ArduinoPlatform::run() {
-    while(true) {
-        if (serialEventRun) 
-            serialEventRun();
-    }
+
+    run([](){});
+}
+
+void ArduinoPlatform::defer(std::function<void()> f) {
+    if (m_deferredQueue.size() < MAX_QUEUE_SIZE)
+        m_deferredQueue.push(f);
+}
+
+void ArduinoPlatform::shutdown() {
+    m_running = false;
 }

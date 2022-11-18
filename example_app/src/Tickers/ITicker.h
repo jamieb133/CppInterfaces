@@ -18,12 +18,16 @@ class ITicker {
 public:
     virtual ~ITicker<TickerImpl>() {}
     void attach(int alarm_time_ms,
-                            TickerCallback& callback) {
+                            TickerCallback callback) {
         static_cast<TickerImpl>(this)->attach(alarm_time_ms, callback);
     };
 
     void stop() {
         static_cast<TickerImpl>(this)->stop();
+    }
+
+    void wait(int millis) {
+        static_cast<TickerImpl>(this)->wait(millis);
     }
                     
 };

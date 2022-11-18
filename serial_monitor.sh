@@ -1,2 +1,2 @@
 #!/bin/bash
-screen /dev/cu.usbmodem142101 9600
+screen /dev/cu.usbmodem144101 9600

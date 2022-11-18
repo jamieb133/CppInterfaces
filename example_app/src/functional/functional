@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <ArduinoSTL.h>
 
 namespace std {
 
@@ -22,12 +23,11 @@ namespace std {
         template <typename Functor>
         //static RetType invoke(Functor* func, Args&&... args) {
         static RetType invoke(Functor* func, Args... args) {
-            return (*func)(args...);
+            return static_cast<RetType>((*func)(args...));
         }
 
         template <typename Functor>
         static void create(Functor* dest, Functor* src) {
-            //new (dest) Functor (*src);
             memcpy(dest, src, sizeof(Functor));
         }
 
@@ -38,7 +38,7 @@ namespace std {
 
         // We need storage to hold the function.
         size_t storageSize;
-        char* data;
+        char* data = nullptr; // Must be inited as null or copy ctor will fall over!
 
     public:
         template<typename Functor>
@@ -49,7 +49,7 @@ namespace std {
             storageSize(sizeof(Functor)),
             data(new char[sizeof(Functor)])
         {
-            //createPtr(data, std::addressof(functor));
+            //createPtr(data, std::addressof(functor)); // Not supported...
             createPtr(data, &functor);
         }
 
@@ -85,10 +85,10 @@ namespace std {
             destroyPtr(data);
         }
 
-        //RetType operator() (Args&&... args) const {
         RetType operator() (Args... args) const {
-            // Static cast prevents compiler error if void.
-            //return invokePtr(data, std::forward<Args>(args)...);
+            // std::forward not supported on ArduinoSTL.
+            //return invokePtr(data, std::forward<Args>(args)...); 
+
             return invokePtr(data, args...);
         }
     };

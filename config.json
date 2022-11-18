@@ -42,7 +42,7 @@
                 {
                     "name" : "TARGET_DEVICE",
                     "type" : "STRING",
-                    "value" : "/dev/cu.usbmodem142101"
+                    "value" : "/dev/cu.usbmodem144101"
                 },
                 {
                     "name" : "TARGET_BAUDRATE",
