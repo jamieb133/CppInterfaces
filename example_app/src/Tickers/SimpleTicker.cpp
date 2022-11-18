@@ -1,20 +1,6 @@
 #include "SimpleTicker.h"
 
 SimpleTicker::SimpleTicker(IPlatform& platform) : m_platform(platform) {
-    std::function<void()> f = [this]() {
-        while(!m_terminate) {
-            // Poll the time.
-            if (!m_callbacks.empty()) {
-                for (auto& callback : m_callbacks) {
-                    if(now() >= callback.time) 
-                        m_platform.defer(callback);
-                }
-            }
-            else 
-                std::this_thread::yield();
-        }
-    };
-
     m_timePollingThread = std::make_shared<std::thread>([this]() {
         while(!m_terminate) {
             // Poll the time.

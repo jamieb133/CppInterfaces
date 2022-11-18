@@ -68,8 +68,6 @@ void ArduinoTicker::stop() {
 }
 
 bool ArduinoTicker::decrementTick() {
-    static bool called = true;
-
     if (pendingCallback->ticksRemaining == 0) {
         // Notify platform that there is a pending callback and
         // reset the tick value.
