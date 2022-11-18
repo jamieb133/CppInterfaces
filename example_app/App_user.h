@@ -1,5 +1,7 @@
 #include "App.h"
 
+// The interfaces are injected to the user facing application
+// code here, maintaining abstraction from the target platform.
 template <class Ticker, class GPIO>
 void App::run(Ticker& ticker,
             GPIO& gpio,
@@ -13,15 +15,15 @@ void App::run(Ticker& ticker,
     const int duration = 10; // s
     const int totalIters = duration * 1000 / rate;
 
-    std::cout << "\n\n\n\n\n\n\n\n\n\n // --- Entered App::run() --- //\n";
+    std::cout << "\n// --- Entered App::run() --- //\n";
 
-    // Toggle pin 7 (LED on Uno) for 5 seconds and then shutdown
+    // Toggle LED for 5 seconds and then shutdown.
     ticker.attach(rate, [&]() {
         // Start when we're ready.
         if (!started)
             return;
 
-        gpio.set(7, toggle);
+        gpio.set(LED_PIN, toggle);
         toggle = !toggle;
 
         if (count++ == totalIters)

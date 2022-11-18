@@ -3,7 +3,10 @@
 
 using namespace std;
 
-FauxGPIO::FauxGPIO() {}
+FauxGPIO::FauxGPIO() {
+    for (auto& p : m_pinArray)
+        p = 0;
+}
 
 void FauxGPIO::set(uint8_t pinNumber, bool value) {
     if (pinNumber < m_pinArray.size() - 1)

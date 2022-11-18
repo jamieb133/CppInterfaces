@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ITicker.h"
+#include "IPlatform.h"
 
 #include <atomic>
 #include <memory>
@@ -34,9 +35,10 @@ private:
     std::shared_ptr<std::thread> m_timePollingThread;
     std::atomic_bool m_terminate;
     std::vector<CallbackInfo> m_callbacks;
+    IPlatform& m_platform;
 
 public:
-    SimpleTicker();
+    SimpleTicker(IPlatform& targetPlatform);
     virtual ~SimpleTicker();
 
     // Interface method will be implemented.

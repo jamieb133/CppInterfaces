@@ -34,7 +34,7 @@ int main() {
     auto gpio = ArduinoGPIO::getInstance();
 
     // Run the user app.
-    App::run(*ticker, *gpio, *platform);
+    App::run(*ticker, *gpio, *platform);    
 
     // Completed.
     indicateFinished();

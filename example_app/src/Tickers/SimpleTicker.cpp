@@ -1,13 +1,13 @@
 #include "SimpleTicker.h"
 
-SimpleTicker::SimpleTicker() {
+SimpleTicker::SimpleTicker(IPlatform& platform) : m_platform(platform) {
     std::function<void()> f = [this]() {
         while(!m_terminate) {
             // Poll the time.
             if (!m_callbacks.empty()) {
                 for (auto& callback : m_callbacks) {
                     if(now() >= callback.time) 
-                        callback();
+                        m_platform.defer(callback);
                 }
             }
             else 
