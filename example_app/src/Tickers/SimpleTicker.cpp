@@ -32,3 +32,7 @@ void SimpleTicker::stop() {
     m_terminate = true;
     m_timePollingThread->join();
 }
+
+void wait(int millis) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(millis));
+}

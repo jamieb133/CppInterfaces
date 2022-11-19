@@ -26,6 +26,9 @@ for config in configs:
     if args.upload:
         if 'upload_enabled' in config.keys():
             cmake_params += ' -DUPLOAD:BOOL=ON'
+    else:
+        cmake_params += ' -DUPLOAD:BOOL=OFF'
+
 
     if args.verbose:
         cmake_params += ' -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON --verbose=1'

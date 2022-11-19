@@ -1,6 +1,7 @@
 #include "Platform/ArduinoPlatform.h"
 #include "Tickers/ArduinoTicker.h"
 #include "GPIO/ArduinoGPIO.h"
+#include "GPIO/FauxGPIO.h"
 
 // The user's application code lives here.
 #include "App_user.h"
@@ -33,8 +34,13 @@ int main() {
     auto ticker = ArduinoTicker::getInstance();
     auto gpio = ArduinoGPIO::getInstance();
 
-    // Run the user app.
-    App::run(*ticker, *gpio, *platform);    
+    FauxGPIO fauxGpio;
+
+    // Run the user app using the real GPIO.
+    //App::run(*ticker, *gpio, *platform); 
+
+    // Run the user app using the fake GPIO.   
+    App::run(*ticker, fauxGpio, *platform);    
 
     // Completed.
     indicateFinished();

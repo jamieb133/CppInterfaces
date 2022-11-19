@@ -45,4 +45,6 @@ public:
     void attach(int rate, 
                 TickerCallback callback);
     void stop();
+
+    void wait(int millis);
 };

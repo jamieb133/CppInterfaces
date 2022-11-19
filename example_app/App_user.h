@@ -32,7 +32,7 @@ void App::run(Ticker& ticker,
 
     // Let's make the user responsible for running the platform.
     platform.run([&]() {
-        // This is our main busy loop, just poll a value.
+        //This is our main busy loop, just poll a value.
         static int nextCount = count + 2;
         started = true;
         if (count == nextCount) {

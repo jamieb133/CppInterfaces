@@ -1,7 +1,9 @@
 #include <iostream>
 #include "FauxGPIO.h"
 
-using namespace std;
+#ifdef ARDUINO
+#include <ArduinoSTL.h>
+#endif
 
 FauxGPIO::FauxGPIO() {
     for (auto& p : m_pinArray)
@@ -9,15 +11,15 @@ FauxGPIO::FauxGPIO() {
 }
 
 void FauxGPIO::set(uint8_t pinNumber, bool value) {
-    if (pinNumber < m_pinArray.size() - 1)
+    if (pinNumber < m_pinArray.size())
         m_pinArray[pinNumber] = value;
 
     // Dump pins.
-    cout << "FauxGPIO pin array (p" << std::to_string(pinNumber)
+    std::cout << "FauxGPIO pin array (p" << pinNumber
                 << "=" << value <<  ") -> {";
     for (auto& p : m_pinArray) 
-        cout << " (" << p << ")";
-    cout << " }" << std::endl;
+        std::cout << " (" << p << ")";
+    std::cout << " }" << std::endl;
 }
 
 unsigned int FauxGPIO::numPins() {
